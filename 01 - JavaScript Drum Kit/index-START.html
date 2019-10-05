@@ -65,10 +65,39 @@
 
     //Play sound when an event happens
     function playSound(e) {
-      console.log(e);
-    }
+      const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+      const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+      //if there is no key finish function
+      if (!key) {
+        return
+      }
+      //if finds a key add class & play sound
+      key.classList.add('playing');
+      //can't play unless audio is done playing, so we reset the current time.
+      audio.currentTime = 0;
+      audio.play();
 
-    const keys = document.querySelectorAll('.key');
+      //remove class
+
+      //Option 1:  using a timeout:
+
+      // setTimeout(function() {
+      //   key.classList.remove('playing')
+      // }, 70);
+
+      //Option 2: using removeTransition
+
+      //first get a list of all keys
+      const keys = document.querySelectorAll(".key");
+      //add a listener to each key to listen if they have transioned
+      keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+      //this function triggers only when the transition has ended
+      function removeTransition(e) {
+        //the event has a target which is the div. so we can use the target.
+        e.target.classList.remove('playing');
+      }
+    }
   </script>
 
 
