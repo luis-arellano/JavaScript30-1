@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Scoped CSS Variables and JS</title>
 </head>
+
 <body>
   <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
 
@@ -21,10 +23,20 @@
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
   <style>
-
     /*
       misc styles, nothing to do with CSS variables
     */
+    :root {
+      --spacing: 10px;
+      --base: #ffc600;
+      --blur: 1px;
+    }
+
+    img {
+      padding: var(--spacing);
+      filter: blur(var(--blur));
+      background: var(--base);
+    }
 
     body {
       text-align: center;
@@ -45,7 +57,42 @@
   </style>
 
   <script>
+    //add event listener
+    var spacing = document.querySelector('#spacing');
+    var blur = document.querySelector('#blur');
+    var base = document.querySelector('#base');
+
+
+    //Below it is my first attemp, but the code seems to repeat, so next I'll try to consolidate.
+    // spacing.addEventListener('mousemove', event => {
+    //   document.documentElement.style.setProperty('--spacing', event.target.value + 'px');
+    // });
+    //
+    // blur.addEventListener('mousemove', event => {
+    //   document.documentElement.style.setProperty('--blur', event.target.value + 'px');
+    // });
+    //
+    //
+    // base.addEventListener('change', event => {
+    //   document.documentElement.style.setProperty('--base', event.target.value);
+    // });
+
+    //better to select all at once
+    const inputs = document.querySelectorAll(".controls input");
+
+    //for each input add event listener:
+    inputs.forEach(input => {
+      input.addEventListener('change', updateHandler);
+      input.addEventListener('mousemove', updateHandler);
+
+    });
+
+    function updateHandler(event) {
+      var suffix = event.target.dataset.sizing || '';
+      document.documentElement.style.setProperty(`--${event.target.id}`, event.target.value + suffix);
+    };
   </script>
 
 </body>
+
 </html>
